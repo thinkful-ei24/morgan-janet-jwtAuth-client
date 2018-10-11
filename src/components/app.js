@@ -27,18 +27,7 @@ export class App extends React.Component {
 
     refreshInactivityTimeout() {
         this.props.dispatch(userIsActive());
-        // Set a warning modal after a set interval of inactivity
-        clearTimeout(this.timeoutWarningCountdown);
-        this.timeoutWarningCountdown = setTimeout(
-            () => this.props.dispatch(userIsInactive()),
-            4 * 60 * 1000 // 4 minutes
-            )
-        // Logout after a set interval of inactivity
-        clearTimeout(this.timeoutCountdown);
-        this.timeoutCountdown = setTimeout(
-            () => this.props.dispatch(clearAuth()),
-            5 * 60 * 1000 // 5 minutes
-        )
+        
     }
 
     startPeriodicRefresh() {
