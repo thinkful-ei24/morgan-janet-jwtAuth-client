@@ -5,6 +5,16 @@ import {API_BASE_URL} from '../config';
 import {normalizeResponseErrors} from './utils';
 // import {saveAuthToken, clearAuthToken} from '../local-storage';
 
+export const USER_IS_ACTIVE = 'USER_IS_ACTIVE';
+export const userIsActive = () => ({
+    type: USER_IS_ACTIVE
+});
+
+export const USER_IS_INACTIVE = 'USER_IS_INACTIVE';
+export const userIsInactive = () => ({
+    type: USER_IS_INACTIVE
+});
+
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const setAuthToken = authToken => ({
     type: SET_AUTH_TOKEN,

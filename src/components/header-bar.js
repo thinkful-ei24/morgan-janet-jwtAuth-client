@@ -1,5 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import TimeoutModal from './timeout-modal';
+
 import {clearAuth} from '../actions/auth';
 import {clearAuthToken} from '../local-storage';
 
@@ -15,10 +17,11 @@ export class HeaderBar extends React.Component {
         if (this.props.loggedIn) {
             logOutButton = (
                 <button onClick={() => this.logOut()}>Log out</button>
-            );
-        }
-        return (
+                );
+            }
+            return (
             <div className="header-bar">
+                {this.props.inactiveUser && <TimeoutModal />}
                 <h1>Foo App</h1>
                 {logOutButton}
             </div>
@@ -27,7 +30,8 @@ export class HeaderBar extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    loggedIn: state.auth.currentUser !== null
+    loggedIn: state.auth.currentUser !== null,
+    inactiveUser: state.auth.inactiveUser
 });
 
 export default connect(mapStateToProps)(HeaderBar);

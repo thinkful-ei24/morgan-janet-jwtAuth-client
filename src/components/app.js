@@ -1,15 +1,17 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Route, withRouter} from 'react-router-dom';
-
 import HeaderBar from './header-bar';
 import LandingPage from './landing-page';
 import Dashboard from './dashboard';
 import RegistrationPage from './registration-page';
-import {refreshAuthToken} from '../actions/auth';
+import {refreshAuthToken, clearAuth, userIsActive, userIsInactive} from '../actions/auth';
 
 export class App extends React.Component {
     componentDidUpdate(prevProps) {
+        if (this.props.loggedIn) {
+            this.refreshInactivityTimeout();
+        }
         if (!prevProps.loggedIn && this.props.loggedIn) {
             // When we are logged in, refresh the auth token periodically
             this.startPeriodicRefresh();
@@ -23,10 +25,26 @@ export class App extends React.Component {
         this.stopPeriodicRefresh();
     }
 
+    refreshInactivityTimeout() {
+        this.props.dispatch(userIsActive());
+        // Set a warning modal after a set interval of inactivity
+        clearTimeout(this.timeoutWarningCountdown);
+        this.timeoutWarningCountdown = setTimeout(
+            () => this.props.dispatch(userIsInactive()),
+            4 * 60 * 1000 // 4 minutes
+            )
+        // Logout after a set interval of inactivity
+        clearTimeout(this.timeoutCountdown);
+        this.timeoutCountdown = setTimeout(
+            () => this.props.dispatch(clearAuth()),
+            5 * 60 * 1000 // 5 minutes
+        )
+    }
+
     startPeriodicRefresh() {
         this.refreshInterval = setInterval(
             () => this.props.dispatch(refreshAuthToken()),
-            15 * 60 * 1000 // One hour
+            15 * 60 * 1000 // 15 minutes
         );
     }
 

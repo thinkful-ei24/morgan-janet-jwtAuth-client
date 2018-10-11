@@ -3,25 +3,39 @@ import {
     CLEAR_AUTH,
     AUTH_REQUEST,
     AUTH_SUCCESS,
-    AUTH_ERROR
+    AUTH_ERROR,
+    USER_IS_ACTIVE,
+    USER_IS_INACTIVE
 } from '../actions/auth';
 
 const initialState = {
     authToken: null, // authToken !== null does not mean it has been validated
     currentUser: null,
     loading: false,
-    error: null
+    error: null,
+    inactiveUser: false
 };
 
 export default function reducer(state = initialState, action) {
-    if (action.type === SET_AUTH_TOKEN) {
+    if (action.type === USER_IS_ACTIVE) {
+        return Object.assign({}, state, {
+            inactiveUser: false
+        })
+    }
+    else if (action.type === USER_IS_INACTIVE) {
+        return Object.assign({}, state, {
+            inactiveUser: true
+        })
+    }
+    else if (action.type === SET_AUTH_TOKEN) {
         return Object.assign({}, state, {
             authToken: action.authToken
         });
     } else if (action.type === CLEAR_AUTH) {
         return Object.assign({}, state, {
             authToken: null,
-            currentUser: null
+            currentUser: null,
+            inactiveUser: false
         });
     } else if (action.type === AUTH_REQUEST) {
         return Object.assign({}, state, {
